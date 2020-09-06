@@ -6,7 +6,7 @@
 #    By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/06/11 04:39:05 by gbourgeo          #+#    #+#              #
-#    Updated: 2019/06/04 00:48:21 by gbourgeo         ###   ########.fr        #
+#    Updated: 2020/09/06 18:26:03 by gbourgeo         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -111,11 +111,10 @@ else ifeq ($(UNAME_S), Darwin)
 	$(WWW) -o hex Ressources/macho_file_info.c $(INCLUDE) $(LIBS)
 endif
 
-elf64:
+elf:
 	gcc -m64 -o elf64 Ressources/sample.c
-
-elf32:
 	gcc -m32 -o elf32 Ressources/sample.c
 
-macho64:
+macho:
 	gcc -m64 -o macho64 Ressources/sample.c
+	gcc -m32 -o macho32 Ressources/sample.c
