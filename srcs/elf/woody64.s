@@ -21,7 +21,7 @@ woody64_func:					; ELF 64 bits version
 	mov 	rax, 1
 	syscall
 
-	jmp 	.end
+	jmp 	.end2
 .decrypt:
 	push r15
 	push r14
@@ -146,6 +146,7 @@ woody64_func:					; ELF 64 bits version
 	add 	rdi, [text_vaddr]
 	call 	.decrypt
 
+.end2:
 	lea 	rbx, [woody64_func]
 	add 	rbx, [text_vaddr]
 	mov 	[text_vaddr], rbx

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fatal.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root </var/mail/root>                      +#+  +:+       +#+        */
+/*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 11:54:48 by root              #+#    #+#             */
-/*   Updated: 2018/05/11 11:59:18 by root             ###   ########.fr       */
+/*   Updated: 2020/10/25 17:29:55 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 #include "ft_fprintf.h"
 #include "main.h"
 
+/*
+** PRINTS ERROR, FREE RESSOURCES AND EXIT.
+** If first argument is NULL, it will call 'perror', otherwise it will print the string.
+** Second argument is for freeing the ressources used.
+*/
 int			ft_fatal(char *str, t_env *e)
 {
 	ft_fprintf(stderr, "%s: ", e->progname);

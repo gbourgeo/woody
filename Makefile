@@ -1,14 +1,14 @@
-#******************************************************************************#
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/06/11 04:39:05 by gbourgeo          #+#    #+#              #
-#    Updated: 2020/09/06 18:26:03 by gbourgeo         ###   ########.fr        #
+#    Updated: 2020/11/08 20:41:20 by gbourgeo         ###   ########.fr        #
 #                                                                              #
-#******************************************************************************#
+# **************************************************************************** #
 
 NAME 	= woody_woodpacker
 ARCH	=
@@ -104,12 +104,34 @@ fclean: clean
 
 re: fclean all
 
-hex: lib
+HEX_NAME = hex
+HEX_DIR = Ressources/elf_file_info/
+HEX_SRC = elf_file_info.c	\
+		elf_file_info_opt.c
+HEX_OBJ = $(addprefix $(HEX_DIR), $(HEX_SRC:.c=.o))
+
+hex:
+
 ifeq ($(UNAME_S), Linux)
-	$(WWW) $(ARCH) -o hex Ressources/elf_file_info.c $(INCLUDE) $(LIBS)
+
+INCLUDE += -I$(HEX_DIR)
+
+$(HEX_NAME): $(HEX_OBJ)
+	@make ARCH=$(ARCH) -C $(LIB_DIR)
+	$(WWW) -o $@ $^ $(LIBS)
+
+$(HEX_DIR)%.o: $(HEX_DIR)%.c
+	$(WWW) -o $@ -c $< $(INCLUDE)
+
 else ifeq ($(UNAME_S), Darwin)
 	$(WWW) -o hex Ressources/macho_file_info.c $(INCLUDE) $(LIBS)
 endif
+
+hex_clean:
+	/bin/rm -f $(HEX_OBJ)
+
+hex_fclean: hex_clean
+	/bin/rm -f $(HEX_NAME)
 
 elf:
 	gcc -m64 -o elf64 Ressources/sample.c

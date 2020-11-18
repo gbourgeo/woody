@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/11 04:51:50 by gbourgeo          #+#    #+#             */
-/*   Updated: 2018/06/03 18:03:14 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/10/25 17:29:36 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static void		map_file(const char *prog, t_env *e)
 		ft_fatal(NULL, e);
 	if ((e->file_size = lseek(e->fd, 1, SEEK_END)) == -1)
 		ft_fatal(NULL, e);
-	e->file = mmap(NULL, e->file_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	e->file = mmap(NULL, e->file_size, PROT_READ | PROT_WRITE,
+		MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	if (e->file == MAP_FAILED)
 		ft_fatal(NULL, e);
 	if ((lseek(e->fd, 0, SEEK_SET)) == -1)
