@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_vprintf.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/11/19 16:22:13 by gbourgeo          #+#    #+#             */
-/*   Updated: 2013/12/17 06:02:11 by pc               ###   ########.fr       */
+/*   Created: 2019/07/17 13:13:33 by gbourgeo          #+#    #+#             */
+/*   Updated: 2019/07/17 13:21:17 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#ifndef FT_VPRINTF_H
+# define FT_VPRINTF_H
 
-size_t		ft_strlen(const char *s)
-{
-	size_t	len;
+# include "ft_base_printf.h"
 
-	len = 0;
-	if (s)
-	{
-		while (s[len])
-			len++;
-	}
-	return (len);
-}
+int				ft_vprintf(const char *format, va_list ap);
+void			ft_vprintf_write(t_dt *data);
+
+#endif

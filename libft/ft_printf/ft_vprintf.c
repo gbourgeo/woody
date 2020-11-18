@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_snprintf.c                                      :+:      :+:    :+:   */
+/*   ft_vprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/21 07:18:19 by gbourgeo          #+#    #+#             */
-/*   Updated: 2018/09/21 07:18:58 by gbourgeo         ###   ########.fr       */
+/*   Created: 2019/07/17 13:05:53 by gbourgeo          #+#    #+#             */
+/*   Updated: 2019/07/17 13:18:50 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "libft.h"
-#include "ft_snprintf.h"
+#include "ft_vprintf.h"
 
-int			ft_snprintf(char *str, size_t size,
-						const char *restrict format, ...)
+int				ft_vprintf(const char *format, va_list ap)
 {
-	t_dt	data;
-	int		ret;
+	t_dt		data;
+	int			ret;
 
 	ft_memset(&data, 0, sizeof(data));
-	*str = '\0';
-	data.str = str;
-	data.str_size = size;
+	data.fd = STDOUT_FILENO;
 	data.tail = (char *)format;
-	data.writeto = ft_snprintf_write;
-	va_start(data.ap, format);
+	data.writeto = ft_vprintf_write;
+	va_copy(data.ap, ap);
 	ret = pf_routine(&data);
 	va_end(data.ap);
 	return (ret);

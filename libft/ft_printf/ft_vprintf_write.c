@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_vprintf_write.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/11/19 16:22:13 by gbourgeo          #+#    #+#             */
-/*   Updated: 2013/12/17 06:02:11 by pc               ###   ########.fr       */
+/*   Created: 2019/07/17 13:15:26 by gbourgeo          #+#    #+#             */
+/*   Updated: 2019/07/17 13:21:32 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <unistd.h>
+#include "ft_vprintf.h"
 
-size_t		ft_strlen(const char *s)
+void			ft_vprintf_write(t_dt *data)
 {
-	size_t	len;
-
-	len = 0;
-	if (s)
-	{
-		while (s[len])
-			len++;
-	}
-	return (len);
+	data->ret += write(data->fd, data->buff, data->pos);
 }

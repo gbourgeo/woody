@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/20 12:02:18 by gbourgeo          #+#    #+#             */
-/*   Updated: 2017/09/21 03:11:15 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/11/14 13:04:46 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ char				*ft_strnstr(const char *s1, const char *s2, size_t n);
 int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 int					ft_atoi(const char *str);
+long				ft_atol(const char *str);
+long				ft_atol_base(const char *str, const char *base);
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);
 int					ft_isalnum(int c);
@@ -88,7 +90,7 @@ char				**ft_tabdup(char **table);
 int					ft_tablen(char **table);
 void				ft_puttab(char **table);
 void				ft_puttab_fd(char **table, int fd);
-void				ft_tabdel(char **table);
+void				ft_tabdel(char ***table);
 char				**ft_split(char *str, char *charset);
 char				**ft_split_whitespaces(char *str);
 char				*ft_str2join(char const *s1, char const *s2, \

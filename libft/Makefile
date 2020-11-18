@@ -1,14 +1,14 @@
-#******************************************************************************#
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/20 18:41:05 by gbourgeo          #+#    #+#              #
-#    Updated: 2018/04/11 04:57:07 by gbourgeo         ###   ########.fr        #
+#    Updated: 2020/11/14 13:05:06 by gbourgeo         ###   ########.fr        #
 #                                                                              #
-#******************************************************************************#
+# **************************************************************************** #
 
 NAME = libft.a
 
@@ -30,7 +30,8 @@ SRC = ft_strlen.c ft_strdup.c ft_strcpy.c ft_strncpy.c ft_strcat.c \
 	get_next_line.c \
 	ft_split.c ft_split_whitespaces.c ft_str2join.c ft_strcdup.c \
 	ft_strcharset.c ft_stricpy.c ft_strndup.c ft_strrcdup.c ft_freestr.c \
-	ft_freetab.c ft_iswhitespace.c ft_split_whitespaces.c ft_pow.c
+	ft_freetab.c ft_iswhitespace.c ft_split_whitespaces.c ft_pow.c ft_atol.c \
+	ft_atol_base.c
 
 PRINTF_DIR = ft_printf/
 PRINTF_SRC = ft_printf.c ft_printf_write.c
@@ -41,6 +42,7 @@ FPRINTF_SRC = ft_fprintf.c ft_fprintf_write.c
 DPRINTF_SRC = ft_dprintf.c ft_dprintf_write.c
 SPRINTF_SRC = ft_sprintf.c ft_sprintf_write.c
 SNPRINTF_SRC = ft_snprintf.c ft_snprintf_write.c
+VPRINTF_SRC = ft_vprintf.c ft_vprintf_write.c
 
 OBJ_DIR = obj/
 OBJ_SRC	= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
@@ -50,8 +52,9 @@ OBJ_PRINTF += $(addprefix $(OBJ_DIR), $(FPRINTF_SRC:.c=.o))
 OBJ_PRINTF += $(addprefix $(OBJ_DIR), $(DPRINTF_SRC:.c=.o))
 OBJ_PRINTF += $(addprefix $(OBJ_DIR), $(SPRINTF_SRC:.c=.o))
 OBJ_PRINTF += $(addprefix $(OBJ_DIR), $(SNPRINTF_SRC:.c=.o))
+OBJ_PRINTF += $(addprefix $(OBJ_DIR), $(VPRINTF_SRC:.c=.o))
 
-WWW	= gcc $(ARCH) -Wall -Werror -Wextra
+WWW	= gcc -Wall -Werror -Wextra
 
 INCLUDES = -I includes/
 

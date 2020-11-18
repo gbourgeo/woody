@@ -1,31 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tabdel.c                                        :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/07/10 01:16:15 by gbourgeo          #+#    #+#             */
-/*   Updated: 2019/10/30 20:47:00 by gbourgeo         ###   ########.fr       */
+/*   Created: 2020/11/14 12:19:02 by gbourgeo          #+#    #+#             */
+/*   Updated: 2020/11/14 12:19:59 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void			ft_tabdel(char ***table)
+long		ft_atol(const char *str)
 {
-	int			i;
+	long	i;
+	long	res;
+	long	isneg;
 
 	i = 0;
-	if (table && *table)
+	res = 0;
+	isneg = 1;
+	while (str[i] == ' ' || str[i] == '\n' || str[i] == '\t' || str[i] == '\v'
+			|| str[i] == '\f' || str[i] == '\r')
+		i++;
+	if (str[i] == '-')
 	{
-		while ((*table)[i])
-		{
-			free((*table)[i]);
-			(*table)[i] = NULL;
-			i++;
-		}
-		free(*table);
-		*table = NULL;
+		isneg = -1;
+		i++;
 	}
+	else if (str[i] == '+')
+		i++;
+	while (str[i] && ft_isdigit(str[i]))
+	{
+		res = res * 10;
+		res = res + str[i++] - '0';
+	}
+	return (res * isneg);
 }
