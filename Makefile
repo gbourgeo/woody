@@ -6,7 +6,7 @@
 #    By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/06/11 04:39:05 by gbourgeo          #+#    #+#              #
-#    Updated: 2020/11/08 20:41:20 by gbourgeo         ###   ########.fr        #
+#    Updated: 2020/11/22 13:11:19 by gbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,11 +17,8 @@ NAME	= woody_woodpacker32
 ARCH	= -m32
 endif
 
-SRC_DIR	= srcs/
+SRC_D	= srcs/
 SRC		= main.c fatal.c key_generator.c
-
-ELF_DIR	= $(SRC_DIR)elf/
-MAC_DIR	= $(SRC_DIR)macho/
 
 HDR_DIR	= includes/
 
@@ -33,10 +30,10 @@ UNAME_S	:= $(shell uname -s)
 UNAME_M := $(shell uname -m)
 
 ifeq ($(UNAME_S), Linux)
+SRC_DIR		= $(SRC_D)elf/
 SRC			+= check_elf_info.c pack_elf64.c pack_elf32.c
 SRC_S		= woody64.s encrypt64.s
 SRC_S		+= woody32.s encrypt32.s
-ASM			= nasm
 ASMFLAG		= -f elf64
 ifeq ($(BIT32), 1)
 ASMFLAG		= -f elf32
@@ -44,43 +41,36 @@ endif
 endif
 
 ifeq ($(UNAME_S), Darwin)
+SRC_DIR		= $(SRC_D)macho/
 SRC			+= check_macho_info.c pack_macho64.c ft_swap_bytes.c
 SRC_S		= woody64.s encrypt64.s
-ASM			= nasm
 ASMFLAG		= -f macho64
 endif
 
 LIB_DIR	= libft/
 LIB_HDR	= $(LIB_DIR)includes
 
-WWW 	= gcc $(ARCH)
-FLAGS	= -Wall -Werror -Wextra
+ASM		= nasm
+CC		= gcc $(ARCH)
+CFLAGS	= -Wall -Werror -Wextra
+ifeq ($(DEBUG), 1)
+CFLAGS	+= -DDEBUG
+endif
 INCLUDE	= -I$(HDR_DIR) -I$(LIB_HDR)
 LIBS	= -L$(LIB_DIR) -lft
 
 all: lib $(NAME)
 
 $(NAME): $(OBJ) $(OBJ_S)
-	$(WWW) -o $@ $^ $(LIBS)
+	$(CC) -o $@ $^ $(LIBS)
 
+$(OBJ_DIR)%.o: $(SRC_D)%.c
+	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
-	$(WWW) $(FLAGS) -o $@ -c $< $(INCLUDE)
+	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
 
-ifeq ($(UNAME_S), Linux)
-$(OBJ_DIR)%.o: $(ELF_DIR)%.c
-	$(WWW) $(FLAGS) -o $@ -c $< $(INCLUDE)
-
-$(OBJ_DIR)%.o: $(ELF_DIR)%.s
+$(OBJ_DIR)%.o: $(SRC_DIR)%.s
 	$(ASM) $(ASMFLAG) -o $@ $<
-endif
-
-ifeq ($(UNAME_S), Darwin)
-$(OBJ_DIR)%.o: $(MAC_DIR)%.c
-	$(WWW) $(FLAGS) -o $@ -c $< $(INCLUDE)
-
-$(OBJ_DIR)%.o: $(MAC_DIR)%.s
-	$(ASM) $(ASMFLAG) -o $@ $<
-endif
 
 .PHONY: lib clean fclean re
 
@@ -104,39 +94,10 @@ fclean: clean
 
 re: fclean all
 
-HEX_NAME = hex
-HEX_DIR = Ressources/elf_file_info/
-HEX_SRC = elf_file_info.c	\
-		elf_file_info_opt.c
-HEX_OBJ = $(addprefix $(HEX_DIR), $(HEX_SRC:.c=.o))
-
-hex:
-
-ifeq ($(UNAME_S), Linux)
-
-INCLUDE += -I$(HEX_DIR)
-
-$(HEX_NAME): $(HEX_OBJ)
-	@make ARCH=$(ARCH) -C $(LIB_DIR)
-	$(WWW) -o $@ $^ $(LIBS)
-
-$(HEX_DIR)%.o: $(HEX_DIR)%.c
-	$(WWW) -o $@ -c $< $(INCLUDE)
-
-else ifeq ($(UNAME_S), Darwin)
-	$(WWW) -o hex Ressources/macho_file_info.c $(INCLUDE) $(LIBS)
-endif
-
-hex_clean:
-	/bin/rm -f $(HEX_OBJ)
-
-hex_fclean: hex_clean
-	/bin/rm -f $(HEX_NAME)
-
 elf:
-	gcc -m64 -o elf64 Ressources/sample.c
-	gcc -m32 -o elf32 Ressources/sample.c
+	$(CC) -m64 -o elf64 Ressources/sample.c
+	$(CC) -m32 -o elf32 Ressources/sample.c
 
 macho:
-	gcc -m64 -o macho64 Ressources/sample.c
-	gcc -m32 -o macho32 Ressources/sample.c
+	$(CC) -m64 -o macho64 Ressources/sample.c
+	$(CC) -m32 -o macho32 Ressources/sample.c

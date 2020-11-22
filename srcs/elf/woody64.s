@@ -8,20 +8,20 @@ DEFAULT REL
 	segment .text
 	woody64_size dd woody64_data - woody64_func
 
-woody64_func:					; ELF 64 bits version
-	push 	rdi
-	push 	rsi
-	push 	rdx
-	push 	rax
-	push 	rbx
+woody64_func:		; ELF 64 bits version
+	push rdi
+	push rsi
+	push rdx
+	push rax
+	push rbx
 
-	mov 	rdi, 1
-	lea 	rsi, [banner64]
-	mov 	rdx, [banner64_size]
-	mov 	rax, 1
+	mov rdi, 1
+	lea rsi, [banner64]
+	mov rdx, [banner64_size]
+	mov rax, 1
 	syscall
 
-	jmp 	.end2
+	jmp .end
 .decrypt:
 	push r15
 	push r14
@@ -140,26 +140,26 @@ woody64_func:					; ELF 64 bits version
 	pop r15
 	ret
 .end:
-	mov 	rsi, QWORD [text_size]
-	lea 	rdx, [woody64_keys]
-	lea 	rdi, [woody64_func]
-	add 	rdi, [text_vaddr]
-	call 	.decrypt
+	lea rdx, [woody64_keys]
+	mov rsi, QWORD [text_size]
+	lea rdi, [woody64_func]
+	add rdi, [text_vaddr]
+	call .decrypt
 
 .end2:
-	lea 	rbx, [woody64_func]
-	add 	rbx, [text_vaddr]
-	mov 	[text_vaddr], rbx
-	lea 	rax, [woody64_func]
-	add 	rax, [jump_vaddr]
-	mov 	[jump_vaddr], rax
+	lea rbx, [woody64_func]
+	add rbx, [text_vaddr]
+	mov [text_vaddr], rbx
+	lea rax, [woody64_func]
+	add rax, [jump_vaddr]
+	mov [jump_vaddr], rax
 
-	pop 	rbx
-	pop 	rax
-	pop 	rdx
-	pop 	rsi
-	pop 	rdi
-	push	QWORD [jump_vaddr]
+	pop rbx
+	pop rax
+	pop rdx
+	pop rsi
+	pop rdi
+	push QWORD [jump_vaddr]
 	ret
 
 woody64_data:
