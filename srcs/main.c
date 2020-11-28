@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/11 04:51:50 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/10/25 17:29:36 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/11/28 15:45:56 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void		map_file(const char *prog, t_env *e)
 	int			ret;
 	int			i;
 
-	if ((e->fd = open(prog, O_RDWR)) == -1)
+	if ((e->fd = open(prog, O_RDONLY)) == -1)
 		ft_fatal(NULL, e);
 	if ((e->file_size = lseek(e->fd, 1, SEEK_END)) == -1)
 		ft_fatal(NULL, e);

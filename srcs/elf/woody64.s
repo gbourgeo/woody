@@ -22,6 +22,8 @@ woody64_func:		; ELF 64 bits version
 	syscall
 
 	jmp .end
+
+; decrypt(void *text_vaddr, size_t text_size, void *keys)
 .decrypt:
 	push r15
 	push r14
@@ -160,6 +162,7 @@ woody64_func:		; ELF 64 bits version
 	pop rsi
 	pop rdi
 	push QWORD [jump_vaddr]
+	int3
 	ret
 
 woody64_data:
