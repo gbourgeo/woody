@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/11 04:59:30 by gbourgeo          #+#    #+#             */
-/*   Updated: 2018/06/30 22:32:35 by root             ###   ########.fr       */
+/*   Updated: 2020/12/13 21:29:42 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,9 @@ typedef struct	s_env
 	ssize_t		file_size;
 	void		*file;
 	uint32_t	key[4];
-	size_t		woody_datalen;
+	size_t		woody_total_size;
 	size_t		off;
+	int			modulo;
 }				t_env;
 
 # ifdef __linux__
@@ -46,26 +47,37 @@ typedef struct	s_elf32
 {
 	Elf32_Ehdr	*header;
 	Elf32_Phdr	*program;
-	Elf32_Phdr	*text_program;
 	Elf32_Shdr	*section;
+	char		*string_table;
 	Elf32_Shdr	*text_section;
+	Elf32_Phdr	*text_program;
 	Elf32_Addr	old_entry;
-	Elf32_Addr	text_entry;
-	uint32_t	text_crypted_size;
+	Elf32_Addr	text_offset;
+	uint32_t	text_size;
 	u_char		padding[8];
+	void		(*woody_func)();
+	uint32_t	woody_size;
 }				t_elf32;
 
 typedef struct	s_elf64
 {
 	Elf64_Ehdr	*header;
 	Elf64_Phdr	*program;
-	Elf64_Phdr	*text_program;
 	Elf64_Shdr	*section;
+	char		*string_table;
 	Elf64_Shdr	*text_section;
+	Elf64_Phdr	*text_program;
 	Elf64_Addr	old_entry;
-	Elf64_Addr	text_entry;
-	uint64_t	text_crypted_size;
+	Elf64_Addr	text_offset;
+	uint64_t	text_size;
+	void		(*woody_func)();
+	uint32_t	woody_size;
 }				t_elf64;
+
+typedef unsigned long int	Elf_Addr;
+# ifndef u_char
+typedef unsigned char		u_char;
+# endif
 
 # elif __APPLE__
 typedef struct					s_macho64
@@ -93,6 +105,9 @@ void			generate_new_key(uint32_t key[4]);
 void			check_elf_info(t_env *e);
 void			pack_elf32(t_env *e);
 void			pack_elf64(t_env *e);
+
+void			pack_elf(t_env *e, void *elf, size_t woody_size, void (*encrypt)(), void (*func)());
+
 void			check_macho_info(t_env *e);
 void			pack_macho64(t_env *e);
 uint32_t		byteswap_32(uint32_t x);

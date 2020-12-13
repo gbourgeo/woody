@@ -6,7 +6,7 @@
 #    By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/06/11 04:39:05 by gbourgeo          #+#    #+#              #
-#    Updated: 2020/11/22 13:11:19 by gbourgeo         ###   ########.fr        #
+#    Updated: 2020/11/29 15:17:16 by gbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ UNAME_M := $(shell uname -m)
 
 ifeq ($(UNAME_S), Linux)
 SRC_DIR		= $(SRC_D)elf/
-SRC			+= check_elf_info.c pack_elf64.c pack_elf32.c
+SRC			+= check_elf_info.c pack_elf64.c pack_elf32.c #pack_elf.c
 SRC_S		= woody64.s encrypt64.s
 SRC_S		+= woody32.s encrypt32.s
 ASMFLAG		= -f elf64

@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 15:41:56 by root              #+#    #+#             */
-/*   Updated: 2019/06/28 17:29:42 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/13 16:04:19 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void			pack_elf32(t_env *e)
 	e->woody_datalen = ((e->banner && *e->banner) ? ft_strlen(e->banner) + 1 : 0)
 		+ sizeof(size_t)
 		+ sizeof(e->key)
-		+ sizeof(elf.text_entry)
-		+ sizeof(elf.text_crypted_size)
+		+ sizeof(elf.text_offset)
+		+ sizeof(elf.text_size)
 		+ sizeof(elf.old_entry);
 	encrypt_text_section(e, &elf);
 	write_new_file(e, &elf);
@@ -92,8 +92,8 @@ static void		write_new_file(t_env *e, t_elf32 *elf)
 
 	e->off = elf->text_program->p_offset + elf->text_program->p_memsz;
 	elf->old_entry = (elf->text_program->p_vaddr + elf->text_program->p_memsz - elf->header->e_entry) * (-1);
-	elf->text_entry = (elf->text_program->p_vaddr + elf->text_program->p_memsz - elf->text_section->sh_addr) * (-1);
-	elf->text_crypted_size = elf->text_section->sh_size;
+	elf->text_offset = (elf->text_program->p_vaddr + elf->text_program->p_memsz - elf->text_section->sh_addr) * (-1);
+	elf->text_size = elf->text_section->sh_size;
 	elf->header->e_entry = elf->text_program->p_vaddr + elf->text_program->p_memsz;
 
 /* Check if we have space to write our code between the 2 PT_LOAD segment */
@@ -124,8 +124,8 @@ static void		write_in_padding(t_env *e, t_elf32 *elf)
 	write(e->fd, ptr, e->off);
 	write(e->fd, &woody32_func, woody32_size);
 	write(e->fd, e->key, sizeof(e->key));
-	write(e->fd, &elf->text_entry, sizeof(elf->text_entry));
-	write(e->fd, &elf->text_crypted_size, sizeof(elf->text_crypted_size));
+	write(e->fd, &elf->text_offset, sizeof(elf->text_offset));
+	write(e->fd, &elf->text_size, sizeof(elf->text_size));
 	write(e->fd, &elf->old_entry, sizeof(elf->old_entry));
 	write(e->fd, &banner_size, sizeof(banner_size));
 	if (e->banner && *e->banner)
@@ -173,8 +173,8 @@ static void		write_add_padding(t_env *e, t_elf32 *elf)
 	write(e->fd, ptr, e->off);
 	write(e->fd, &woody32_func, woody32_size);
 	write(e->fd, e->key, sizeof(e->key));
-	write(e->fd, &elf->text_entry, sizeof(elf->text_entry));
-	write(e->fd, &elf->text_crypted_size, sizeof(elf->text_crypted_size));
+	write(e->fd, &elf->text_offset, sizeof(elf->text_offset));
+	write(e->fd, &elf->text_size, sizeof(elf->text_size));
 	write(e->fd, &elf->old_entry, sizeof(elf->old_entry));
 	write(e->fd, &banner_size, sizeof(banner_size));
 	if (e->banner && *e->banner)

@@ -162,7 +162,7 @@ woody64_func:		; ELF 64 bits version
 	pop rsi
 	pop rdi
 	push QWORD [jump_vaddr]
-	int3
+;	int3
 	ret
 
 woody64_data:

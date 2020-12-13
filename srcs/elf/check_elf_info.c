@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_elf_info.c                                     :+:      :+:    :+:   */
+/*   check_elf_info.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 22:09:34 by gbourgeo          #+#    #+#             */
-/*   Updated: 2018/06/30 23:39:43 by root             ###   ########.fr       */
+/*   Updated: 2020/11/28 21:37:39 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,15 @@ static void		check_header(t_env *e)
 		ft_fatal("Invalid ELF magic.", e);
 	if (hdr->e_ident[EI_VERSION] != EV_CURRENT)
 		ft_fatal("Unsupported ELF version.", e);
-	if (ft_strcmp(&e->progname[ft_strlen(e->progname) - 2], "32") == 0)
-	{
-		if (hdr->e_ident[EI_CLASS] != ELFCLASS32)
-			ft_fatal("Unsupported ELF Class (32 bit only).", e);
-	}
-	else if (hdr->e_ident[EI_CLASS] != ELFCLASS64)
-		ft_fatal("Unsupported ELF Class (64 bit only).", e);
+	// if (ft_strcmp(&e->progname[ft_strlen(e->progname) - 2], "32") == 0)
+	// {
+	// 	if (hdr->e_ident[EI_CLASS] != ELFCLASS32)
+	// 		ft_fatal("Unsupported ELF Class (32 bit only).", e);
+	// }
+	// else if (hdr->e_ident[EI_CLASS] != ELFCLASS64)
+	// 	ft_fatal("Unsupported ELF Class (64 bit only).", e);
+	if (hdr->e_ident[EI_CLASS] != ELFCLASS32 && hdr->e_ident[EI_CLASS] != ELFCLASS64)
+		ft_fatal("Unsupported ELF Class (Undefined).", e);
 	if (hdr->e_ident[EI_DATA] == ELFDATANONE)
 		ft_fatal("Unsupported ELF Byte order.", e);
 	if (hdr->e_type != ET_EXEC && hdr->e_type != ET_DYN)

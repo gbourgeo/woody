@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/11 04:51:50 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/11/28 15:45:56 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/13 16:02:06 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,13 @@ static void		map_file(const char *prog, t_env *e)
 	e->fd = 0;
 }
 
+extern uint32_t	woody64_size;
+extern uint32_t	woody32_size;
+void			woody64_encrypt(u_char *data, size_t len, const uint32_t *key);
+void			woody32_encrypt(u_char *data, size_t len, const uint32_t *key);
+void			woody64_func(void);
+void			woody32_func(void);
+
 int				main(int ac, char **av)
 {
 	t_env		e;
@@ -52,7 +59,9 @@ int				main(int ac, char **av)
 	e.progname = ft_strrchr(av[0], '/');
 	e.progname = (e.progname == NULL) ? av[0] : e.progname + 1;
 	if (ac < 2 || ac > 3) {
-		ft_printf("usage: %s [program] <message>\n", e.progname);
+		ft_printf("Usage: %s _program_ [banner]\n", e.progname);
+		ft_printf("\t_program_\tBinary to infect.\n");
+		ft_printf("\tbanner\tThe banner to print once the infected binary is infected.\n");
 		return (1);
 	}
 	ft_strncpy(e.banner, (av[2]) ? av[2] : "....WOODY....", 255);
@@ -62,8 +71,10 @@ int				main(int ac, char **av)
 	check_elf_info(&e);
 	generate_new_key(e.key);
 	if (((Elf64_Ehdr *)e.file)->e_ident[EI_CLASS] == ELFCLASS32)
+		// pack_elf(&e, , woody32_size, woody32_encrypt, woody32_func);
 		pack_elf32(&e);
 	else if (((Elf64_Ehdr *)e.file)->e_ident[EI_CLASS] == ELFCLASS64)
+		// pack_elf(&e, , woody64_size, woody64_encrypt, woody64_func);
 		pack_elf64(&e);
 #elif __APPLE__
 	check_macho_info(&e);
