@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pack_elf32.c                                       :+:      :+:    :+:   */
+/*   pack_elf_32.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 15:41:56 by root              #+#    #+#             */
-/*   Updated: 2020/12/13 16:04:19 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:43:06 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void		write_new_file(t_env *e, t_elf32 *elf);
 static void		write_in_padding(t_env *e, t_elf32 *elf);
 static void		write_add_padding(t_env *e, t_elf32 *elf);
 
-void			pack_elf32(t_env *e)
+void			pack_elf_32(t_env *e)
 {
 	t_elf32		elf;
 	
@@ -31,7 +31,7 @@ void			pack_elf32(t_env *e)
 	elf.header = (Elf32_Ehdr *)e->file;
 	elf.section = (Elf32_Shdr *)(e->file + elf.header->e_shoff);
 	elf.program = (Elf32_Phdr *)(e->file + elf.header->e_phoff);
-	e->woody_datalen = ((e->banner && *e->banner) ? ft_strlen(e->banner) + 1 : 0)
+	e->woody_total_size = ((e->banner && *e->banner) ? ft_strlen(e->banner) + 1 : 0)
 		+ sizeof(size_t)
 		+ sizeof(e->key)
 		+ sizeof(elf.text_offset)
@@ -98,7 +98,7 @@ static void		write_new_file(t_env *e, t_elf32 *elf)
 
 /* Check if we have space to write our code between the 2 PT_LOAD segment */
 	Elf32_Phdr *next = elf->text_program + 1;
-	if (next->p_offset - (elf->text_program->p_offset + elf->text_program->p_filesz) > woody32_size + e->woody_datalen)
+	if (next->p_offset - (elf->text_program->p_offset + elf->text_program->p_filesz) > woody32_size + e->woody_total_size)
 		write_in_padding(e, elf);
 	else
 		write_add_padding(e, elf);
@@ -115,8 +115,8 @@ static void		write_in_padding(t_env *e, t_elf32 *elf)
 	ptr = (char *)e->file;
 	banner_size = (e->banner && *e->banner) ? ft_strlen(e->banner) + 1 : 0;
 
-	elf->text_program->p_memsz += (woody32_size + e->woody_datalen);
-	elf->text_program->p_filesz += (woody32_size + e->woody_datalen);
+	elf->text_program->p_memsz += (woody32_size + e->woody_total_size);
+	elf->text_program->p_filesz += (woody32_size + e->woody_total_size);
 	elf->text_program->p_flags = PF_R | PF_W | PF_X;
 
 /* Had this line if you want to disassemble the infection with debuggers */
@@ -133,7 +133,7 @@ static void		write_in_padding(t_env *e, t_elf32 *elf)
 		write(e->fd, e->banner, banner_size - 1);
 		write(e->fd, "\n", 1);
 	}
-	e->off += (woody32_size + e->woody_datalen);
+	e->off += (woody32_size + e->woody_total_size);
 	write(e->fd, ptr + e->off, e->file_size - e->off - 1);
 }
 
@@ -146,7 +146,7 @@ static void		write_add_padding(t_env *e, t_elf32 *elf)
 	ptr = (char *)e->file;
 	banner_size = (e->banner && *e->banner) ? ft_strlen(e->banner) + 1 : 0;
 	padding = 0;
-	while (padding < woody32_size + e->woody_datalen)
+	while (padding < woody32_size + e->woody_total_size)
 		padding += getpagesize();
 	/* Change Program Header offest */
 	for (size_t i = 0; i < elf->header->e_phnum; i++) {
@@ -166,8 +166,8 @@ static void		write_add_padding(t_env *e, t_elf32 *elf)
 	}
 	elf->header->e_shoff += padding;
 
-	elf->text_program->p_memsz += (woody32_size + e->woody_datalen);
-	elf->text_program->p_filesz += (woody32_size + e->woody_datalen);
+	elf->text_program->p_memsz += (woody32_size + e->woody_total_size);
+	elf->text_program->p_filesz += (woody32_size + e->woody_total_size);
 	elf->text_program->p_flags = PF_R | PF_W | PF_X;
 
 	write(e->fd, ptr, e->off);
@@ -182,7 +182,7 @@ static void		write_add_padding(t_env *e, t_elf32 *elf)
 		write(e->fd, e->banner, banner_size - 1);
 		write(e->fd, "\n", 1);
 	}
-	while (padding-- > woody32_size + e->woody_datalen)
+	while (padding-- > woody32_size + e->woody_total_size)
 		write(e->fd, "\0", 1);
 	write(e->fd, ptr + e->off, e->file_size - e->off - 1);
 }

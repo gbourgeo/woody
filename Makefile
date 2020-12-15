@@ -6,7 +6,7 @@
 #    By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/06/11 04:39:05 by gbourgeo          #+#    #+#              #
-#    Updated: 2020/11/29 15:17:16 by gbourgeo         ###   ########.fr        #
+#    Updated: 2020/12/14 00:42:21 by gbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,9 @@ ARCH	= -m32
 endif
 
 SRC_D	= srcs/
-SRC		= main.c fatal.c key_generator.c
+SRC		= main.c		\
+		ft_fatal.c			\
+		key_generator.c	\
 
 HDR_DIR	= includes/
 
@@ -31,9 +33,21 @@ UNAME_M := $(shell uname -m)
 
 ifeq ($(UNAME_S), Linux)
 SRC_DIR		= $(SRC_D)elf/
-SRC			+= check_elf_info.c pack_elf64.c pack_elf32.c #pack_elf.c
+SRC			+= check_elf_info.c #pack_elf.c
+
+SRC_DIR_64	= $(SRC_DIR)64/
+SRC			+= pack_elf_64.c	\
+			get_elf_info_64.c	\
+			modifications_64.c	\
+			write_new_file_64.c	\
+
 SRC_S		= woody64.s encrypt64.s
+
+SRC_DIR_32	= $(SRC_DIR)32/
+SRC			+= pack_elf_32.c		\
+
 SRC_S		+= woody32.s encrypt32.s
+
 ASMFLAG		= -f elf64
 ifeq ($(BIT32), 1)
 ASMFLAG		= -f elf32
@@ -68,8 +82,14 @@ $(OBJ_DIR)%.o: $(SRC_D)%.c
 	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
+$(OBJ_DIR)%.o: $(SRC_DIR_64)%.c
+	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
+$(OBJ_DIR)%.o: $(SRC_DIR_32)%.c
+	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.s
+$(OBJ_DIR)%.o: $(SRC_DIR_64)%.s
+	$(ASM) $(ASMFLAG) -o $@ $<
+$(OBJ_DIR)%.o: $(SRC_DIR_32)%.s
 	$(ASM) $(ASMFLAG) -o $@ $<
 
 .PHONY: lib clean fclean re

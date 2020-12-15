@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/11 04:59:30 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/13 21:29:42 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:33:29 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct	s_env
 	uint32_t	key[4];
 	size_t		woody_total_size;
 	size_t		off;
+	size_t		padding;
 	int			modulo;
 }				t_env;
 
@@ -103,8 +104,14 @@ typedef struct					s_macho64
 int				ft_fatal(char *str, t_env *e);
 void			generate_new_key(uint32_t key[4]);
 void			check_elf_info(t_env *e);
-void			pack_elf32(t_env *e);
-void			pack_elf64(t_env *e);
+void			pack_elf_32(t_env *e);
+
+void			pack_elf_64(t_env *e);
+void			get_elf_info_64(t_env *e, t_elf64 *elf);
+void			modification_after_text_64(t_env *e, t_elf64 *elf);
+void			modification_before_text_64(t_env *e, t_elf64 *elf);
+void			modification_add_padding_64(t_env *e, t_elf64 *elf);
+void			write_new_file_64(t_env *e, t_elf64 *elf);
 
 void			pack_elf(t_env *e, void *elf, size_t woody_size, void (*encrypt)(), void (*func)());
 

@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/11 04:51:50 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/13 16:02:06 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:35:57 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ static void		map_file(const char *prog, t_env *e)
 	e->fd = 0;
 }
 
-extern uint32_t	woody64_size;
-extern uint32_t	woody32_size;
-void			woody64_encrypt(u_char *data, size_t len, const uint32_t *key);
-void			woody32_encrypt(u_char *data, size_t len, const uint32_t *key);
-void			woody64_func(void);
-void			woody32_func(void);
+// extern uint32_t	woody64_size;
+// extern uint32_t	woody32_size;
+// void			woody64_encrypt(u_char *data, size_t len, const uint32_t *key);
+// void			woody32_encrypt(u_char *data, size_t len, const uint32_t *key);
+// void			woody64_func(void);
+// void			woody32_func(void);
 
 int				main(int ac, char **av)
 {
@@ -72,10 +72,10 @@ int				main(int ac, char **av)
 	generate_new_key(e.key);
 	if (((Elf64_Ehdr *)e.file)->e_ident[EI_CLASS] == ELFCLASS32)
 		// pack_elf(&e, , woody32_size, woody32_encrypt, woody32_func);
-		pack_elf32(&e);
+		pack_elf_32(&e);
 	else if (((Elf64_Ehdr *)e.file)->e_ident[EI_CLASS] == ELFCLASS64)
 		// pack_elf(&e, , woody64_size, woody64_encrypt, woody64_func);
-		pack_elf64(&e);
+		pack_elf_64(&e);
 #elif __APPLE__
 	check_macho_info(&e);
 	generate_new_key(e.key);
