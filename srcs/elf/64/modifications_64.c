@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 00:16:36 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/14 00:39:03 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/19 13:04:33 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ void			modification_after_text_64(t_env *e, t_elf64 *elf)
 	elf->text_program->p_filesz += e->woody_total_size;
 	elf->text_program->p_flags = PF_R | PF_W | PF_X;
 
-	/* Had this line if you want to disassemble the infection with debuggers */
+	/* Had this line if you want to disassemble the injection portion with debuggers */
 	// elf->text_section->sh_size += woody64_size;
 }
-
 void			modification_before_text_64(t_env *e, t_elf64 *elf)
 {
 #ifdef DEBUG
@@ -175,7 +174,7 @@ void			modification_add_padding_64(t_env *e, t_elf64 *elf)
 			}
 		}
 	}
-	/* Change the .got.plt offsets */
+	/* Change offsets in the section .got.plt */
 	if (elf->header->e_shstrndx == SHN_UNDEF)
 		ft_fatal("String table not reachable. Abort.", e);
 	char *string_table = (char *)e->file + (elf->section + elf->header->e_shstrndx)->sh_offset;
@@ -212,14 +211,15 @@ void			modification_add_padding_64(t_env *e, t_elf64 *elf)
 	elf->text_program->p_filesz += e->padding;
 	elf->text_program->p_flags = PF_R | PF_W | PF_X;
 
-	/* Woody entry point */
+	/* Woody offset from file (entry point) */
 	Elf64_Addr woody_off = elf->text_program->p_vaddr + e->padding - e->woody_total_size;
-	/* Offset of '.text' PT_LOAD */
+	/* Offset from where we will stop to copy the initial program and start to inject our code,
+	*  Here we have to take in count the padding */
 	e->off = elf->text_program->p_offset;
-	/* Old entry point offset from woody */
+	/* Old entry point offset calculated from woody */
 	elf->old_entry = elf->header->e_entry + e->padding - woody_off;
-	/* '.text' section offset from woody */
+	/* '.text' section offset calculated from woody */
 	elf->text_offset = elf->text_section->sh_addr - woody_off;
-	/* New program entry point */
+	/* New entry point */
 	elf->header->e_entry = woody_off;
 }

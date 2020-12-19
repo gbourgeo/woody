@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 00:14:31 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/14 00:38:51 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/19 13:05:58 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ void			get_elf_info_64(t_env *e, t_elf64 *elf)
 		ft_fatal("Segment \".text\" not found.", e);
 	e->woody_total_size = woody64_size
 		+ sizeof(e->key)                                              /* generated key for decryption */
-		+ sizeof(elf->text_offset)                                     /* .text section offset         */
-		+ sizeof(elf->text_size)                                       /* .text section size           */
-		+ sizeof(elf->old_entry)                                       /* program entry point          */
+		+ sizeof(elf->text_offset)                                    /* .text section offset         */
+		+ sizeof(elf->text_size)                                      /* .text section size           */
+		+ sizeof(elf->old_entry)                                      /* program entry point          */
 		+ sizeof(size_t)                                              /* banner size                  */
 		+ ((e->banner && *e->banner) ? ft_strlen(e->banner) + 1 : 0); /* banner                       */
-	e->modulo = e->woody_total_size % 16;
+	e->modulo = 16 - (e->woody_total_size % 16);
 	e->woody_total_size += e->modulo;
 }

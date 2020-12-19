@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/11 04:51:50 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/14 00:35:57 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/16 00:16:45 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int				main(int ac, char **av)
 	if (ac < 2 || ac > 3) {
 		ft_printf("Usage: %s _program_ [banner]\n", e.progname);
 		ft_printf("\t_program_\tBinary to infect.\n");
-		ft_printf("\tbanner\tThe banner to print once the infected binary is infected.\n");
+		ft_printf("\tbanner\t\tBanner to print when infected binary runs.\n");
 		return (1);
 	}
 	ft_strncpy(e.banner, (av[2]) ? av[2] : "....WOODY....", 255);

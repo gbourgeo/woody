@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   pack_macho64.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/17 18:43:58 by gbourgeo          #+#    #+#             */
-/*   Updated: 2018/06/07 01:47:57 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/19 13:06:43 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
+
 #include <unistd.h>
 #include "libft.h"
 #include "main.h"
