@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pf_s.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/16 04:14:43 by gbourgeo          #+#    #+#             */
-/*   Updated: 2018/04/11 02:23:29 by root             ###   ########.fr       */
+/*   Updated: 2020/11/18 20:09:17 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 ** len[1] = The number of characters to write to print each ints.
 */
 
-static int		*ft_wcharlen(const int *str, int *i)
+static int		*ft_wcharlen(const wchar_t *str, int *i)
 {
 	int			w;
 
@@ -43,7 +43,7 @@ static int		*ft_wcharlen(const int *str, int *i)
 	return (i);
 }
 
-static void		find_precision(t_dt *data, const int *str, int *len)
+static void		find_precision(t_dt *data, const wchar_t *str, int *len)
 {
 	int			w;
 	int			precision;

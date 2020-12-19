@@ -6,7 +6,7 @@
 #    By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/20 18:41:05 by gbourgeo          #+#    #+#              #
-#    Updated: 2020/11/14 13:05:06 by gbourgeo         ###   ########.fr        #
+#    Updated: 2020/11/18 20:05:42 by gbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,8 @@ OBJ_PRINTF += $(addprefix $(OBJ_DIR), $(SPRINTF_SRC:.c=.o))
 OBJ_PRINTF += $(addprefix $(OBJ_DIR), $(SNPRINTF_SRC:.c=.o))
 OBJ_PRINTF += $(addprefix $(OBJ_DIR), $(VPRINTF_SRC:.c=.o))
 
-WWW	= gcc -Wall -Werror -Wextra
+CC	= gcc
+CFLAGS = -Wall -Werror -Wextra
 
 INCLUDES = -I includes/
 
@@ -71,11 +72,11 @@ $(NAME): $(OBJ_SRC) $(OBJ_PRINTF)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@echo -n .
-	@$(WWW) -o $@ -c $< $(INCLUDES)
+	@$(CC) $(ARCH) $(CFLAGS) -o $@ -c $< $(INCLUDES)
 
 $(OBJ_DIR)%.o: $(PRINTF_DIR)%.c
 	@echo -n .
-	@$(WWW) -o $@ -c $< $(INCLUDES)
+	@$(CC) $(ARCH) $(CFLAGS) -o $@ -c $< $(INCLUDES)
 
 clean:
 	@if test -d $(OBJ_DIR) ; then rm -rf $(OBJ_DIR) ; echo Libft .o erased. ; fi
