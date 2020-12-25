@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/11 04:59:30 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/14 00:33:29 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/25 19:55:45 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ typedef struct	s_env
 	const char	*progname;
 	char		banner[256];
 	uint64_t	banner_len;
-	int			fd;
 	ssize_t		file_size;
 	void		*file;
 	uint32_t	key[4];
 	size_t		woody_total_size;
 	size_t		off;
 	size_t		padding;
+	int			fd;
 	int			modulo;
 }				t_env;
 
@@ -56,8 +56,6 @@ typedef struct	s_elf32
 	Elf32_Addr	text_offset;
 	uint32_t	text_size;
 	u_char		padding[8];
-	void		(*woody_func)();
-	uint32_t	woody_size;
 }				t_elf32;
 
 typedef struct	s_elf64
@@ -71,11 +69,22 @@ typedef struct	s_elf64
 	Elf64_Addr	old_entry;
 	Elf64_Addr	text_offset;
 	uint64_t	text_size;
-	void		(*woody_func)();
-	uint32_t	woody_size;
 }				t_elf64;
 
-typedef unsigned long int	Elf_Addr;
+void			pack_elf_32(t_env *e);
+void			get_elf_info_32(t_env *e, t_elf32 *elf);
+void			modification_after_text_32(t_env *e, t_elf32 *elf);
+void			modification_before_text_32(t_env *e, t_elf32 *elf);
+void			modification_add_padding_32(t_env *e, t_elf32 *elf);
+void			write_new_file_32(t_env *e, t_elf32 *elf);
+
+void			pack_elf_64(t_env *e);
+void			get_elf_info_64(t_env *e, t_elf64 *elf);
+void			modification_after_text_64(t_env *e, t_elf64 *elf);
+void			modification_before_text_64(t_env *e, t_elf64 *elf);
+void			modification_add_padding_64(t_env *e, t_elf64 *elf);
+void			write_new_file_64(t_env *e, t_elf64 *elf);
+
 # ifndef u_char
 typedef unsigned char		u_char;
 # endif
@@ -99,24 +108,15 @@ typedef struct					s_macho64
 	uint64_t					filesz;
 	uint64_t					sectsize;
 }								t_macho64;
+
+void			check_macho_info(t_env *e);
+void			pack_macho64(t_env *e);
+uint32_t		byteswap_32(uint32_t x);
+
 # endif
 
 int				ft_fatal(char *str, t_env *e);
 void			generate_new_key(uint32_t key[4]);
 void			check_elf_info(t_env *e);
-void			pack_elf_32(t_env *e);
-
-void			pack_elf_64(t_env *e);
-void			get_elf_info_64(t_env *e, t_elf64 *elf);
-void			modification_after_text_64(t_env *e, t_elf64 *elf);
-void			modification_before_text_64(t_env *e, t_elf64 *elf);
-void			modification_add_padding_64(t_env *e, t_elf64 *elf);
-void			write_new_file_64(t_env *e, t_elf64 *elf);
-
-void			pack_elf(t_env *e, void *elf, size_t woody_size, void (*encrypt)(), void (*func)());
-
-void			check_macho_info(t_env *e);
-void			pack_macho64(t_env *e);
-uint32_t		byteswap_32(uint32_t x);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 15:41:56 by root              #+#    #+#             */
-/*   Updated: 2020/12/14 00:34:44 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/24 09:07:11 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-static void		find_section(t_elf64 *elf, Elf64_Shdr **first)
+static void		find_text_first_section(t_elf64 *elf, Elf64_Shdr **first)
 {
 	*first = NULL;
 	for (size_t i = 0; i < elf->header->e_shnum; i++)
@@ -27,7 +27,7 @@ static void		find_section(t_elf64 *elf, Elf64_Shdr **first)
 	}
 }
 
-static void		find_segment(t_elf64 *elf, Elf64_Phdr **next)
+static void		find_text_next_segment(t_elf64 *elf, Elf64_Phdr **next)
 {
 	*next = NULL;
 	for (size_t i = 0; i < elf->header->e_phnum; i++)
@@ -49,8 +49,8 @@ void			pack_elf_64(t_env *e)
 	size_t		room_before_first;
 
 	get_elf_info_64(e, &elf);
-	find_section(&elf, &first);
-	find_segment(&elf, &next);
+	find_text_first_section(&elf, &first);
+	find_text_next_segment(&elf, &next);
 	room_before_next = (next) ? next->p_vaddr - (elf.text_program->p_vaddr + elf.text_program->p_filesz) : 0;
 	room_before_first = first->sh_addr - elf.text_program->p_vaddr;
 	/* Check if we have room to write our code between the '.text' segment and the next segment */

@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/11 04:51:50 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/16 00:16:45 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/24 09:05:43 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,6 @@ static void		map_file(const char *prog, t_env *e)
 		perror("close()");
 	e->fd = 0;
 }
-
-// extern uint32_t	woody64_size;
-// extern uint32_t	woody32_size;
-// void			woody64_encrypt(u_char *data, size_t len, const uint32_t *key);
-// void			woody32_encrypt(u_char *data, size_t len, const uint32_t *key);
-// void			woody64_func(void);
-// void			woody32_func(void);
 
 int				main(int ac, char **av)
 {

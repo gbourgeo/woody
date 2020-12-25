@@ -14,8 +14,12 @@ woody32_func:						; ELF 32 bits version
 	push	ecx
 	push	edx
 
-	mov		ecx, DWORD [esp + 16]
-	add		ecx, banner32 - woody32_func + 0x8
+	call	.getaddress
+.calladdress:
+	mov		ecx, DWORD [esp - 4]
+	sub		ecx, .calladdress - woody32_func
+	mov		DWORD [esp - 4], ecx	; Store woody32_func in [esp - 4]
+	add		ecx, banner32 - woody32_func
 	mov		edx, DWORD [ecx - 4]	; Load banner32_size
 	mov		ebx, 1					; Write on STDOUT (1)
 	mov		eax, 4					; Syscall write (4)
@@ -130,7 +134,7 @@ woody32_func:						; ELF 32 bits version
 	add		ecx, 20					; Go to [text_size] address
 	push	DWORD [ecx]
 	sub		ecx, 4					; Go to [text_vaddr] address
-	mov		ebx, DWORD [esp + 24]	; Get [woody32_func] address
+	mov		ebx, DWORD [esp - 16]	; Get [woody32_func] address
 	add		ebx, [ecx]				; Get [.text] address
 	push	ebx
 	call	.decrypt
@@ -148,12 +152,13 @@ woody32_func:						; ELF 32 bits version
 	pop		ebx
 	pop		eax
 	mov		DWORD [esp], edi
+.getaddress:
 	ret
 
 woody32_data:
 	woody32_keys dd 0x0, 0x0, 0x0, 0x0
-	text_vaddr dw 0x0
-	text_size dw 0x0
-	jump_vaddr dw 0x0
-	banner32_size dw 0x0
+	text_vaddr dd 0x0
+	text_size dd 0x0
+	jump_vaddr dd 0x0
+	banner32_size dd 0x0
 	banner32 db ""
