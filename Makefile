@@ -6,20 +6,20 @@
 #    By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/06/11 04:39:05 by gbourgeo          #+#    #+#              #
-#    Updated: 2020/12/14 00:42:21 by gbourgeo         ###   ########.fr        #
+#    Updated: 2020/12/25 10:21:18 by gbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME 	= woody_woodpacker
+NAME	= woody_woodpacker
 ARCH	=
-ifeq ($(BIT32), 1)
+ifeq ($(32BIT), 1)
 NAME	= woody_woodpacker32
 ARCH	= -m32
 endif
 
 SRC_D	= srcs/
 SRC		= main.c		\
-		ft_fatal.c			\
+		ft_fatal.c		\
 		key_generator.c	\
 
 HDR_DIR	= includes/
@@ -44,12 +44,15 @@ SRC			+= pack_elf_64.c	\
 SRC_S		= woody64.s encrypt64.s
 
 SRC_DIR_32	= $(SRC_DIR)32/
-SRC			+= pack_elf_32.c		\
+SRC			+= pack_elf_32.c	\
+			get_elf_info_32.c	\
+			modifications_32.c	\
+			write_new_file_32.c	\
 
 SRC_S		+= woody32.s encrypt32.s
 
 ASMFLAG		= -f elf64
-ifeq ($(BIT32), 1)
+ifeq ($(32BIT), 1)
 ASMFLAG		= -f elf32
 endif
 endif
@@ -95,19 +98,18 @@ $(OBJ_DIR)%.o: $(SRC_DIR_32)%.s
 .PHONY: lib clean fclean re
 
 lib:
-	@make ARCH=$(ARCH) -C $(LIB_DIR)
+	@make ARCH=$(ARCH) -sC $(LIB_DIR)
 	@mkdir -p $(OBJ_DIR)
 
 clean:
-	@make -C $(LIB_DIR) clean
+	@make -sC $(LIB_DIR) clean
 	/bin/rm -rf $(OBJ_DIR)
 
 fclean: clean
-	@make -C $(LIB_DIR) fclean
+	@make -sC $(LIB_DIR) fclean
 	/bin/rm -f $(NAME)
 	/bin/rm -f $(NAME)32
 	/bin/rm -f woody
-	/bin/rm -f hex
 	/bin/rm -f elf32
 	/bin/rm -f elf64
 	/bin/rm -f macho64
