@@ -6,14 +6,13 @@
 #    By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/06/11 04:39:05 by gbourgeo          #+#    #+#              #
-#    Updated: 2020/12/25 22:04:58 by gbourgeo         ###   ########.fr        #
+#    Updated: 2020/12/25 22:33:41 by gbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= woody_woodpacker
 ARCH	=
 ifeq ($(32BIT), 1)
-NAME	= woody_woodpacker32
 ARCH	= -m32
 endif
 
