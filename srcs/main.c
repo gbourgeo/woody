@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/11 04:51:50 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/24 09:05:43 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/25 22:17:56 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ int				main(int ac, char **av)
 		return (1);
 	}
 	ft_strncpy(e.banner, (av[2]) ? av[2] : "....WOODY....", 255);
-	e.banner_len = ft_strlen(e.banner) + 1;
 	map_file(av[1], &e);
 #ifdef __linux__
 	check_elf_info(&e);
 	generate_new_key(e.key);
+	get_encryption_func(&e, av[0]);
 	if (((Elf64_Ehdr *)e.file)->e_ident[EI_CLASS] == ELFCLASS32)
 		// pack_elf(&e, , woody32_size, woody32_encrypt, woody32_func);
 		pack_elf_32(&e);

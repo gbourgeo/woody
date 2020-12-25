@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/11 04:59:30 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/25 19:55:45 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/25 22:26:27 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ typedef struct	s_env
 {
 	const char	*progname;
 	char		banner[256];
-	uint64_t	banner_len;
 	ssize_t		file_size;
 	void		*file;
 	uint32_t	key[4];
@@ -41,9 +40,11 @@ typedef struct	s_env
 	size_t		padding;
 	int			fd;
 	int			modulo;
+	void		(*encrypt)(u_char *, size_t, const uint32_t *);
 }				t_env;
 
 # ifdef __linux__
+
 typedef struct	s_elf32
 {
 	Elf32_Ehdr	*header;
@@ -70,6 +71,9 @@ typedef struct	s_elf64
 	Elf64_Addr	text_offset;
 	uint64_t	text_size;
 }				t_elf64;
+
+void			check_elf_info(t_env *e);
+void			get_encryption_func(t_env *e, char *prog);
 
 void			pack_elf_32(t_env *e);
 void			get_elf_info_32(t_env *e, t_elf32 *elf);
@@ -117,6 +121,5 @@ uint32_t		byteswap_32(uint32_t x);
 
 int				ft_fatal(char *str, t_env *e);
 void			generate_new_key(uint32_t key[4]);
-void			check_elf_info(t_env *e);
 
 #endif

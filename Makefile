@@ -6,7 +6,7 @@
 #    By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/06/11 04:39:05 by gbourgeo          #+#    #+#              #
-#    Updated: 2020/12/25 10:21:18 by gbourgeo         ###   ########.fr        #
+#    Updated: 2020/12/25 22:04:58 by gbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ UNAME_M := $(shell uname -m)
 
 ifeq ($(UNAME_S), Linux)
 SRC_DIR		= $(SRC_D)elf/
-SRC			+= check_elf_info.c #pack_elf.c
+SRC			+= check_elf_info.c		\
+			get_encryption_func.c	\
 
 SRC_DIR_64	= $(SRC_DIR)64/
 SRC			+= pack_elf_64.c	\

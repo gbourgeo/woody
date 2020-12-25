@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 00:18:44 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/25 20:07:22 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/25 22:24:27 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,11 @@
 
 extern uint32_t	woody32_size;
 void			woody32_func(void);
-void			woody32_encrypt(u_char *data, size_t len, const uint32_t *key);
 
 #include<stdio.h>
 void			write_new_file_32(t_env *e, t_elf32 *elf)
 {
-	size_t		banner_len;
+	uint32_t	banner_len;
 
 	/* Open new file to inject our code */
 	e->fd = open(OUTPUT_FILENAME, O_WRONLY | O_CREAT | O_TRUNC, 00755);
@@ -28,7 +27,7 @@ void			write_new_file_32(t_env *e, t_elf32 *elf)
 		ft_fatal(NULL, e);
 	banner_len = ft_strlen(e->banner) + 1;
 	/* Encrypt the .text section */
-	woody32_encrypt((u_char *)(e->file + elf->text_section->sh_offset - e->padding), elf->text_section->sh_size, e->key);
+	e->encrypt((u_char *)(e->file + elf->text_section->sh_offset - e->padding), elf->text_section->sh_size, e->key);
 	/* Write the same bytes until padding or injection */
 	write(e->fd, (char *)e->file, e->off);
 	if (e->padding)
@@ -39,9 +38,9 @@ void			write_new_file_32(t_env *e, t_elf32 *elf)
 	/* Write injection */
 	write(e->fd, &woody32_func, woody32_size);
 	write(e->fd, e->key, sizeof(e->key));
-	write(e->fd, &elf->text_offset, sizeof(elf->text_offset));
-	write(e->fd, &elf->text_size, sizeof(elf->text_size));
-	write(e->fd, &elf->old_entry, sizeof(elf->old_entry));
+	write(e->fd, &elf->text_offset, sizeof((t_elf32){}.text_offset));
+	write(e->fd, &elf->text_size, sizeof((t_elf32){}.text_size));
+	write(e->fd, &elf->old_entry, sizeof((t_elf32){}.old_entry));
 	write(e->fd, &banner_len, sizeof(banner_len));
 	if (e->banner && *e->banner)
 	{

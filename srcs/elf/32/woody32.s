@@ -18,11 +18,12 @@ woody32_func:						; ELF 32 bits version
 .calladdress:
 	mov		ecx, DWORD [esp - 4]
 	sub		ecx, .calladdress - woody32_func
-	mov		DWORD [esp - 4], ecx	; Store woody32_func in [esp - 4]
-	add		ecx, banner32 - woody32_func
-	mov		edx, DWORD [ecx - 4]	; Load banner32_size
-	mov		ebx, 1					; Write on STDOUT (1)
-	mov		eax, 4					; Syscall write (4)
+	mov		DWORD [esp - 4], ecx			; Store woody32_func in [esp - 4]
+	add		ecx, banner32 - woody32_func	; Load banner32
+	mov		edx, DWORD [ecx - 4]			; Load banner32_size
+	mov		ebx, 1							; Write on STDOUT (1)
+	mov		eax, 4							; Syscall write (4)
+;	int3
 	int		0x80
 	jmp		.end
 

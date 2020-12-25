@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 00:18:44 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/19 13:04:09 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/25 22:29:00 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 
 extern uint32_t	woody64_size;
 void			woody64_func(void);
-void			woody64_encrypt(u_char *data, size_t len, const uint32_t *key);
 
 void			write_new_file_64(t_env *e, t_elf64 *elf)
 {
-	size_t		banner_len;
+	uint64_t	banner_len;
 
 	/* Open new file to inject our code */
 	e->fd = open(OUTPUT_FILENAME, O_WRONLY | O_CREAT | O_TRUNC, 00755);
@@ -27,7 +26,7 @@ void			write_new_file_64(t_env *e, t_elf64 *elf)
 		ft_fatal(NULL, e);
 	banner_len = ft_strlen(e->banner) + 1;
 	/* Encrypt the .text section */
-	woody64_encrypt((u_char *)(e->file + elf->text_section->sh_offset - e->padding), elf->text_section->sh_size, e->key);
+	e->encrypt((u_char *)(e->file + elf->text_section->sh_offset - e->padding), elf->text_section->sh_size, e->key);
 	/* Write the same bytes until padding or injection */
 	write(e->fd, (char *)e->file, e->off);
 	if (e->padding)
@@ -38,9 +37,9 @@ void			write_new_file_64(t_env *e, t_elf64 *elf)
 	/* Write injection */
 	write(e->fd, &woody64_func, woody64_size);
 	write(e->fd, e->key, sizeof(e->key));
-	write(e->fd, &elf->text_offset, sizeof(elf->text_offset));
-	write(e->fd, &elf->text_size, sizeof(elf->text_size));
-	write(e->fd, &elf->old_entry, sizeof(elf->old_entry));
+	write(e->fd, &elf->text_offset, sizeof((t_elf64){}.text_offset));
+	write(e->fd, &elf->text_size, sizeof((t_elf64){}.text_size));
+	write(e->fd, &elf->old_entry, sizeof((t_elf64){}.old_entry));
 	write(e->fd, &banner_len, sizeof(banner_len));
 	if (e->banner && *e->banner)
 	{

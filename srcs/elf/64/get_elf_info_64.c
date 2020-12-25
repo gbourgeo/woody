@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 00:14:31 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/19 13:05:58 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/25 22:28:18 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void			get_elf_info_64(t_env *e, t_elf64 *elf)
 		+ sizeof(elf->text_offset)                                    /* .text section offset         */
 		+ sizeof(elf->text_size)                                      /* .text section size           */
 		+ sizeof(elf->old_entry)                                      /* program entry point          */
-		+ sizeof(size_t)                                              /* banner size                  */
+		+ sizeof(uint64_t)                                            /* banner size                  */
 		+ ((e->banner && *e->banner) ? ft_strlen(e->banner) + 1 : 0); /* banner                       */
 	e->modulo = 16 - (e->woody_total_size % 16);
 	e->woody_total_size += e->modulo;
