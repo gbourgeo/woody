@@ -41,23 +41,33 @@ int main(void) {
 $> make elf
 or
 $> make macho
+or
+$> make nopie
 ```
 
 + Compilation for ELF 64 bit executables
 ```sh
 $> make
-$> ./woody_woodpacker elf32
-woody_woodpacker: Invalid ELF Class (64 bit only).
 $> ./woody_woodpacker macho64
 woody_woodpacker: Invalid ELF file architecture.
+
+$> ./woody_woodpacker elf32
+key_value: 575F6F79A9690916D07FA53913B2D78F
+
+$> ./woody
+....WOODY....
+Hello, World!
+
 $> ./woody_woodpacker elf64
 key_value: 575F6F79A9690916D07FA53913B2D78F
+
 $> ./woody
 ....WOODY....
 Hello, World!
 
 $> ./woody_woodpacker elf64 "HEY YOU"
 key_value: CAE0834DBDB494A35D2FAAED72669258
+
 $> ./woody
 HEY YOU
 Hello, World!
@@ -68,12 +78,83 @@ $>
 + Compilation for ELF 32 bit executables
 ```sh
 $> make BIT32=1
-$> ./woody_woodpacker32 test32
+$> ./woody_woodpacker elf32
 $> ./woody
 ....WOODY....
 Hello, World!
-$> ./woody_woodpacker test64
-woody_woodpacker: Invalid ELF Class (32 bit only).
+
+$> ./woody_woodpacker elf64
+$> ./woody
+....WOODY....
+Hello, World!
+
+```
+
++ Compilation in DEBUG mode
+Debug mode just write on stdout if the code is written "After text", "Before Text" or "Add padding"
+
+```sh
+$ make DEBUG=1 && ./woody_woodpacker elf64 0 && ./woody && for i in $(seq 1 7); do ./woody_woodpacker woody "$i" && ./woody; done
+key_value: 7A35A48CD0E1F34FCE84F58293E5464
+Write AFTER text ...
+0
+Hello, World!
+key_value: 7A35A48CD0E1F34FCE84F58293E5464
+Write AFTER text ...
+1
+0
+Hello, World!
+key_value: 7A35A48CD0E1F34FCE84F58293E5464
+Write AFTER text ...
+2
+1
+0
+Hello, World!
+key_value: 7A35A48CD0E1F34FCE84F58293E5464
+Write AFTER text ...
+3
+2
+1
+0
+Hello, World!
+key_value: 7A35A48CD0E1F34FCE84F58293E5464
+Write AFTER text ...
+4
+3
+2
+1
+0
+Hello, World!
+key_value: 7A35A48CD0E1F34FCE84F58293E5464
+Write AFTER text ...
+5
+4
+3
+2
+1
+0
+Hello, World!
+key_value: 7A35A48CD0E1F34FCE84F58293E5464
+Write ADD padding ...
+6
+5
+4
+3
+2
+1
+0
+Hello, World!
+key_value: 7A35A48CD0E1F34FCE84F58293E5464
+Write BEFORE text ...
+6
+5
+4
+3
+2
+1
+0
+Hello, World!
+
 ```
 
 ## AUTHOR(S)
