@@ -6,7 +6,7 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 15:41:56 by root              #+#    #+#             */
-/*   Updated: 2020/12/24 09:07:11 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/27 11:38:08 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ void			pack_elf_64(t_env *e)
 	/* Check if we have room to write our code between the '.text' segment and the next segment */
 	if (room_before_next > e->woody_total_size)
 		modification_after_text_64(e, &elf);
+	/* If the executable is no-pie relative, then we can't add padding because the addresses are hard coded */
+	else if (elf.header->e_type == ET_EXEC)
+		ft_fatal("Executable format is not Position Independent. Can't modify it.", e);
 	/* Or before the first .text segment section */
 	else if (room_before_first > e->woody_total_size)
 		modification_before_text_64(e, &elf);

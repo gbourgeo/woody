@@ -6,17 +6,20 @@
 /*   By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 00:16:36 by gbourgeo          #+#    #+#             */
-/*   Updated: 2020/12/24 09:48:26 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/12/27 10:45:30 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 #include "libft.h"
+#ifdef DEBUG
+# include "ft_printf.h"
+#endif
 
 void			modification_after_text_32(t_env *e, t_elf32 *elf)
 {
 #ifdef DEBUG
-	printf("\e[32mWrite AFTER text ...\e[0m\n");
+	ft_printf("\e[32mWrite AFTER text ...\e[0m\n");
 #endif
 	e->off = elf->text_program->p_offset + elf->text_program->p_filesz;
 	elf->old_entry = (elf->text_program->p_vaddr + elf->text_program->p_filesz - elf->header->e_entry) * (-1);
@@ -33,7 +36,7 @@ void			modification_after_text_32(t_env *e, t_elf32 *elf)
 void			modification_before_text_32(t_env *e, t_elf32 *elf)
 {
 #ifdef DEBUG
-	printf("\e[34mWrite BEFORE text ...\e[0m\n");
+	ft_printf("\e[34mWrite BEFORE text ...\e[0m\n");
 #endif
 	/* 
 	** If we get here, it means we already ADD padding and write infection before the first section of the .text segment.
@@ -75,7 +78,7 @@ static char		d_tag_is_ptr(Elf32_Sxword tag)
 void			modification_add_padding_32(t_env *e, t_elf32 *elf)
 {
 #ifdef DEBUG
-	printf("\e[33mWrite ADD padding ...\e[0m\n");
+	ft_printf("\e[33mWrite ADD padding ...\e[0m\n");
 #endif
 	/* Compute the padding to add from segment alignement */
 	while (e->padding < e->woody_total_size)

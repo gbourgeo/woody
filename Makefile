@@ -6,7 +6,7 @@
 #    By: gbourgeo <gbourgeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/06/11 04:39:05 by gbourgeo          #+#    #+#              #
-#    Updated: 2020/12/25 22:33:41 by gbourgeo         ###   ########.fr        #
+#    Updated: 2020/12/27 11:39:23 by gbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -108,11 +108,12 @@ clean:
 fclean: clean
 	@make -sC $(LIB_DIR) fclean
 	/bin/rm -f $(NAME)
-	/bin/rm -f $(NAME)32
 	/bin/rm -f woody
 	/bin/rm -f elf32
 	/bin/rm -f elf64
 	/bin/rm -f macho64
+	/bin/rm -f no_pie_elf32
+	/bin/rm -f no_pie_elf64
 
 re: fclean all
 
@@ -123,3 +124,7 @@ elf:
 macho:
 	$(CC) -m64 -o macho64 Ressources/sample.c
 	$(CC) -m32 -o macho32 Ressources/sample.c
+
+nopie:
+	$(CC) -m64 -no-pie -o no_pie_elf64 Ressources/sample.c
+	$(CC) -m32 -no-pie -o no_pie_elf32 Ressources/sample.c
