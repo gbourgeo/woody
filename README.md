@@ -91,6 +91,7 @@ Hello, World!
 ```
 
 + Compilation in DEBUG mode
+
 Debug mode just write on stdout if the code is written "After text", "Before Text" or "Add padding"
 
 ```sh
